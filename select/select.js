@@ -1,17 +1,20 @@
-const getTemplate = () => {
+const getTemplate = (data = {}, placeholder = 'Default placeholder') => {
+    const items = data.map(item => {
+        return `
+            <li class="select__item">${item.value}</li>
+        `
+    })
+
     return `
         <div class="select__input" data-type="input">
             <span>
-                Hello select
+                ${placeholder}
             </span>
-            <i class="fas fa-chevron-down"></i>
+            <i class="fas fa-chevron-down" data-type="arrow"></i>
         </div>
         <div class="select__dropdown">
             <ul class="select__list">
-                <li class="select__item">123</li>
-                <li class="select__item">123</li>
-                <li class="select__item">123</li>
-                <li class="select__item">123</li>
+                ${items.join('')}
             </ul>
         </div>
     `
@@ -20,19 +23,22 @@ const getTemplate = () => {
 export class Select {
     constructor(selector, options) {
         this.$el = document.querySelector(selector)
+        this.options = options
 
         this.#render()
         this.#setup()
     }
 
     #render() {
+        const { placeholder, data } = this.options
         this.$el.classList.add('select')
-        this.$el.innerHTML = getTemplate()
+        this.$el.innerHTML = getTemplate(data, placeholder)
     }
 
     #setup() {
         this.clickHandler = this.clickHandler.bind(this)
         this.$el.addEventListener('click', this.clickHandler)
+        this.$arrow = this.$el.querySelector('[data-type="arrow"]')
     }
 
     clickHandler(event) {
@@ -53,10 +59,14 @@ export class Select {
 
     open() {
         this.$el.classList.add('open')
+        this.$arrow.classList.remove('fa-chevron-down')
+        this.$arrow.classList.add('fa-chevron-up')
     }
 
     close() {
         this.$el.classList.remove('open')
+        this.$arrow.classList.remove('fa-chevron-up')
+        this.$arrow.classList.add('fa-chevron-down')
     }
 
     destroy() {

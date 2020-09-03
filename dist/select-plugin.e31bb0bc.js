@@ -134,7 +134,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _classPrivateMethodGet(receiver, privateSet, fn) { if (!privateSet.has(receiver)) { throw new TypeError("attempted to get private field on non-instance"); } return fn; }
 
 var getTemplate = function getTemplate() {
-  return "\n        <div class=\"select__input\" data-type=\"input\">\n            <span>\n                Hello select\n            </span>\n            <i class=\"fas fa-chevron-down\"></i>\n        </div>\n        <div class=\"select__dropdown\">\n            <ul class=\"select__list\">\n                <li class=\"select__item\">123</li>\n                <li class=\"select__item\">123</li>\n                <li class=\"select__item\">123</li>\n                <li class=\"select__item\">123</li>\n            </ul>\n        </div>\n    ";
+  var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var placeholder = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Default placeholder';
+  var items = data.map(function (item) {
+    return "\n            <li class=\"select__item\">".concat(item.value, "</li>\n        ");
+  });
+  return "\n        <div class=\"select__input\" data-type=\"input\">\n            <span>\n                ".concat(placeholder, "\n            </span>\n            <i class=\"fas fa-chevron-down\" data-type=\"arrow\"></i>\n        </div>\n        <div class=\"select__dropdown\">\n            <ul class=\"select__list\">\n                ").concat(items.join(''), "\n            </ul>\n        </div>\n    ");
 };
 
 var _render = new WeakSet();
@@ -150,6 +155,7 @@ var Select = /*#__PURE__*/function () {
     _render.add(this);
 
     this.$el = document.querySelector(selector);
+    this.options = options;
 
     _classPrivateMethodGet(this, _render, _render2).call(this);
 
@@ -174,11 +180,15 @@ var Select = /*#__PURE__*/function () {
     key: "open",
     value: function open() {
       this.$el.classList.add('open');
+      this.$arrow.classList.remove('fa-chevron-down');
+      this.$arrow.classList.add('fa-chevron-up');
     }
   }, {
     key: "close",
     value: function close() {
       this.$el.classList.remove('open');
+      this.$arrow.classList.remove('fa-chevron-up');
+      this.$arrow.classList.add('fa-chevron-down');
     }
   }, {
     key: "destroy",
@@ -198,13 +208,17 @@ var Select = /*#__PURE__*/function () {
 exports.Select = Select;
 
 var _render2 = function _render2() {
+  var _this$options = this.options,
+      placeholder = _this$options.placeholder,
+      data = _this$options.data;
   this.$el.classList.add('select');
-  this.$el.innerHTML = getTemplate();
+  this.$el.innerHTML = getTemplate(data, placeholder);
 };
 
 var _setup2 = function _setup2() {
   this.clickHandler = this.clickHandler.bind(this);
   this.$el.addEventListener('click', this.clickHandler);
+  this.$arrow = this.$el.querySelector('[data-type="arrow"]');
 };
 },{}],"../Users/Влад/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
@@ -285,7 +299,28 @@ var _select = require("./select/select");
 
 require("./select/styles.scss");
 
-var select = new _select.Select('#select', {});
+var select = new _select.Select('#select', {
+  placeholder: 'Please choose an element',
+  data: [{
+    id: '1',
+    value: 'React'
+  }, {
+    id: '2',
+    value: 'Angular'
+  }, {
+    id: '3',
+    value: 'Vue'
+  }, {
+    id: '4',
+    value: 'React Native'
+  }, {
+    id: '5',
+    value: 'Next'
+  }, {
+    id: '6',
+    value: 'Nest'
+  }]
+});
 },{"./select/select":"select/select.js","./select/styles.scss":"select/styles.scss"}],"../Users/Влад/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -314,7 +349,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60057" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54277" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
